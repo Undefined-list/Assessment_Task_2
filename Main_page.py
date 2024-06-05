@@ -25,12 +25,13 @@ def main(page: ft.Page):
                     if x.charge > 0:
                         Dropd.options.append(ft.dropdown.Option(x.name))
     def Balence_button_pressed(e):
+        #defines all processess completed when balence button pressed
         if Negativeelement.value == neg_none and Positiveelement.value == pos_none:
              T.value = "Please select one of the options from the dropdowns above."
         elif Negativeelement.value == neg_none:
              T.value = "Please select a negative element."
         elif Positiveelement.value == pos_none:
-             T.value = "Please select a positive value."
+             T.value = "Please select a positive element."
              #all of this is just error handling.
         else:
              T.value = ""
@@ -41,12 +42,12 @@ def main(page: ft.Page):
                 if y.name == Positiveelement.value:
                     Positive_element = y
                     #all of this uses a for loop to search through the whole list of elements
-             atomic_equation = atoms.Ballence(Positive_element, Negative_element)
-             #using the ballencing function from the created module
+             atomic_equation = Negative_element.Balence(Positive_element)
+             #using the ballencing method from the created subclass
              Opendialogue(e, atomic_equation.translate(SUB), atoms.naming(atomic_equation))
-             #turns all numbers in the equation into subscript, and gets the named version
+             #turns all numbers in the equation into subscript, and gets the name of the formula
         page.update()
-        #all of this happens whenever the button gets pressed
+        #makes it so that all previous processess show up on screen
     Show_results = ft.AlertDialog(
         title= ft.Text("Balenced results")
         #basic dialogue, to be iterated on
