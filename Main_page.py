@@ -7,13 +7,13 @@ def main(page: ft.Page):
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     class Dropdowns_maker(ft.Dropdown):
     #simplifying the creation of dropdowns, since there is more than one.
-        def __init__(self, name, description):
+        def __init__(self, name, description, change):
             super().__init__()
             #this is the creation of a subclass, but we do not know the properties of the original.
             self.label = name
             self.hint_text = description
             self.options = []
-
+            self.on_change= change
     def creatingdropdowns(Dropd):
     #simplifies adding a large amount of options into a dropdown
             for x in atoms.Full_list:
@@ -24,18 +24,13 @@ def main(page: ft.Page):
                 if Dropd.label == "Positive Element":
                     if x.charge > 0:
                         Dropd.options.append(ft.dropdown.Option(x.name))
-    def Balence_button_pressed(e):
-        #defines all processess completed when balence button pressed
-        if Negativeelement.value == neg_none and Positiveelement.value == pos_none:
-             T.value = "Please select one of the options from the dropdowns above."
-        elif Negativeelement.value == neg_none:
+    def changed_results(e):
+        if Negativeelement.value == neg_none:
              T.value = "Please select a negative element."
         elif Positiveelement.value == pos_none:
              T.value = "Please select a positive element."
              #all of this is just error handling.
-        else:
-             T.value = ""
-             #this makes the error text go away if you enter stuff correctly.
+        else: 
              for y in atoms.Full_list:
                 if y.name == Negativeelement.value:
                     Negative_element = y
@@ -43,27 +38,11 @@ def main(page: ft.Page):
                     Positive_element = y
                     #all of this uses a for loop to search through the whole list of elements
              atomic_equation = Negative_element.Balence(Positive_element)
-             #using the ballencing method from the created subclass
-             Opendialogue(e, atomic_equation.translate(SUB), atoms.naming(atomic_equation))
-             #turns all numbers in the equation into subscript, and gets the name of the formula
+             Name_of_formula = atoms.naming(atomic_equation)
+             T.value = f"The name of the diatomic equation you have made is {Name_of_formula}. It's equation is {atomic_equation.replace(" ", "").translate(SUB)}"
         page.update()
-        #makes it so that all previous processess show up on screen
-    Show_results = ft.AlertDialog(
-        title= ft.Text("Balenced results")
-        #basic dialogue, to be iterated on
-    )
-    def Opendialogue(e, atomic_equation, Name_of_formula):
-        page.dialog = Show_results
-        Show_results.open = True
-        Show_results.content = ft.Text(f"The name of the diatomic equation you have made is {Name_of_formula}. It's equation is {atomic_equation.replace(" ", "")}")
-        #this will show different things on the dialogue depending on the user input
-    Balence_button =  ft.ElevatedButton(
-        text= "Balence?",
-        on_click= Balence_button_pressed,
-        bgcolor= ft.colors.AMBER_300
-        )
-    Negativeelement = Dropdowns_maker("Negative Element", "Negative charge")
-    Positiveelement = Dropdowns_maker("Positive Element", "Positive Charge")
+    Negativeelement = Dropdowns_maker("Negative Element", "Negative charge", changed_results)
+    Positiveelement = Dropdowns_maker("Positive Element", "Positive Charge", changed_results)
     creatingdropdowns(Negativeelement)
     creatingdropdowns(Positiveelement)
     atoms_content = ft.Row(
@@ -79,15 +58,14 @@ def main(page: ft.Page):
     neg_none = Negativeelement.value
     pos_none = Positiveelement.value
     #gets the empty values of the dropdowns, so that it can check if there has been any input
-    T= ft.Text()
+    T= ft.Text("Please select One element from each dropdown")
     page.add(
          atoms_content,
         ft.Row(
              controls= [
-                  T,
-                  Balence_button
+                  T
              ],
-             alignment= ft.MainAxisAlignment.END,
+             alignment= ft.MainAxisAlignment.CENTER,
              spacing= 20
         )
         #puts everything on the screen
