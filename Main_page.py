@@ -3,7 +3,7 @@ import atoms
 SUB = str.maketrans("0123456789", "₀₁₂₃₄₅₆₇₈₉")
 #allows use of subscript numbers, used when doing the formula
 def main(page: ft.Page):
-    page.title = "Balencing basic diatomic ionic compounds"
+    page.title = "Balencing Basic Diatomic Ionic Compounds"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     class Dropdowns_maker(ft.Dropdown):
     #simplifying the creation of dropdowns, since there is more than one.
@@ -39,7 +39,7 @@ def main(page: ft.Page):
                     #all of this uses a for loop to search through the whole list of elements
              atomic_equation = Negative_element.Balence(Positive_element)
              Name_of_formula = atoms.naming(atomic_equation)
-             T.value = f"The name of the diatomic equation you have made is {Name_of_formula}. It's equation is {atomic_equation.replace(" ", "").translate(SUB)}"
+             T.value = f"The name of the diatomic equation you have made is {Name_of_formula}. It's equation is {atomic_equation.replace(" ", "").translate(SUB)}."
         page.update()
     Negativeelement = Dropdowns_maker("Negative Element", "Negative charge", changed_results)
     Positiveelement = Dropdowns_maker("Positive Element", "Positive Charge", changed_results)
